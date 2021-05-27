@@ -1,0 +1,88 @@
+Compiling your contracts...
+===========================
+✔ Fetching solc version list from solc-bin. Attempt #1
+> Everything is up to date, there is nothing to compile.
+
+
+
+Starting migrations...
+======================
+> Network name:    'bsctest'
+> Network id:      97
+> Block gas limit: 29882814 (0x1c7f9be)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0x9b2a2788fdbfbdc259145f53b95b5b7b1205b7f29f72e9fdc084f38328a433a2
+   > Blocks: 8            Seconds: 25
+   > contract address:    0xc116651ce10761F348EAda85Fc55e529f7B687B1
+   > block number:        9159558
+   > block timestamp:     1621972684
+   > account:             0x453B8D46D3D41d3B3DdC09B20AE53aa1B6aB186E
+   > balance:             0.90662946
+   > gas used:            246904 (0x3c478)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00493808 ETH
+
+   Pausing for 10 confirmations...
+   -------------------------------
+   > confirmation number: 2 (block: 9159565)
+   > confirmation number: 4 (block: 9159567)
+   > confirmation number: 5 (block: 9159568)
+   > confirmation number: 7 (block: 9159570)
+   > confirmation number: 8 (block: 9159571)
+   > confirmation number: 9 (block: 9159572)
+   > confirmation number: 10 (block: 9159573)
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00493808 ETH
+
+
+2_mint_migration.js
+===================
+
+   Deploying 'Mint'
+   ----------------
+   > transaction hash:    0x5fd796770d86ad9c3e0d073a31e5f51a27076831753a34bb516cb08945196aab
+   > Blocks: 9            Seconds: 28
+   > contract address:    0x07C29d74969dDc11b74CA1d4c29f0209C6390Fd9
+   > block number:        9159594
+   > block timestamp:     1621972792
+   > account:             0x453B8D46D3D41d3B3DdC09B20AE53aa1B6aB186E
+   > balance:             0.85324396
+   > gas used:            2626762 (0x2814ca)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.05253524 ETH
+
+   Pausing for 10 confirmations...
+   -------------------------------
+   > confirmation number: 2 (block: 9159601)
+   > confirmation number: 4 (block: 9159603)
+   > confirmation number: 5 (block: 9159604)
+   > confirmation number: 6 (block: 9159605)
+   > confirmation number: 8 (block: 9159607)
+   > confirmation number: 9 (block: 9159608)
+   > confirmation number: 10 (block: 9159609)
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.05253524 ETH
+
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.05747332 ETH
+
+
+oncemore@ubuntu:~/BlockchainWork/afen/contract$ 
+
