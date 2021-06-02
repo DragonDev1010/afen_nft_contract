@@ -41,18 +41,14 @@ contract Main is ERC1155{
     }
 
     function calc_fee(uint _price) public pure returns(uint) {
-        return _price * 2;
+        return _price*4/100;
     }
 
-    event MainTestEvent(address from, uint bal_f, address to, uint bal_t);
     function set_sell(uint _id, uint token_id) public {
         nft_list[_id]._isSell = true;
         if(token_id == 0) {
             uint list_fee = calc_fee(nft_list[_id]._aprice);
-            address sender = msg.sender;
-            afen.sell(sender, 1000);
-            (address a, uint bal_a, address b, uint bal_b) = afen.safeTransfer(sender, address(this), list_fee);
-            emit MainTestEvent(a, bal_a, b, bal_b);
+            afen.safeTransfer(msg.sender, address(this), list_fee);
         } else {
             uint list_fee = calc_fee(nft_list[_id]._bprice);
             bsc.safeTransfer(msg.sender, address(this), list_fee);
