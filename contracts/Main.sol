@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 import './FakeAfenToken.sol';
 import './FakeBscToken.sol';
 
-contract Main is ERC1155{
+contract Main is ERC1155, Ownable{
     struct Nft {
         string _hash;
         uint _aprice;
@@ -20,7 +21,17 @@ contract Main is ERC1155{
     event Minted(string _hash, uint aprice, uint bprice, uint amount, address creator);
     event Minted_nft_len(uint length);
     event SettedSell(uint id, bool isSet, address creator, address setter);
-    constructor() ERC1155("") {}    
+
+    
+    constructor() ERC1155("") Ownable(){
+    }
+
+    receive() external payable {}
+
+    event Withdrawed(address withdrawer);
+    function withdraw() public payable onlyOwner{
+        emit Withdrawed(msg.sender);
+    }
     function mint(string memory _hash, uint _aprice, uint _bprice, uint _amount) public {
         uint nft_len = nft_list.length;
         _mint(msg.sender, nft_len, _amount, "");
