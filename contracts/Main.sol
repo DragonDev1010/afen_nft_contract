@@ -29,8 +29,16 @@ contract Main is ERC1155, Ownable{
     receive() external payable {}
 
     event Withdrawed(address withdrawer);
-    function withdraw() public payable onlyOwner{
-        emit Withdrawed(msg.sender);
+    function withdrawBnb() public payable onlyOwner{
+        address payable sender = payable(msg.sender);
+        sender.transfer(address(this).balance);
+    }
+    event WithdrawAfen_Event (address _owner, uint balanceOf);
+    function withdrawAfen() public payable onlyOwner {
+        uint balance = afen.balanceOf(msg.sender);
+        afen.transfer(msg.sender, balance);
+        uint new_balance = afen.balanceOf(msg.sender);
+        emit WithdrawAfen_Event(msg.sender, new_balance);
     }
     function mint(string memory _hash, uint _aprice, uint _bprice, uint _amount) public {
         uint nft_len = nft_list.length;
@@ -52,14 +60,16 @@ contract Main is ERC1155, Ownable{
     }
 
     function calc_fee(uint _price) public pure returns(uint) {
-        return _price*4/100;
+        return 10;
     }
 
+    event TestEvent (uint amount, address from, uint bal_from, address to, uint bal_to);
     function set_sell(uint _id, uint token_id) public {
         nft_list[_id]._isSell = true;
         if(token_id == 0) {
             uint list_fee = calc_fee(nft_list[_id]._aprice);
-            afen.safeTransfer(msg.sender, address(this), list_fee);
+            (uint _a, address _f, uint _bal_f, address _t, uint _bal_t) = afen.safeTransfer(msg.sender, address(this), list_fee);
+            emit TestEvent(_a, _f, _bal_f, _t, _bal_t);
         } else {
             uint list_fee = calc_fee(nft_list[_id]._bprice);
             bsc.safeTransfer(msg.sender, address(this), list_fee);
