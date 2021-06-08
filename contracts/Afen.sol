@@ -7,15 +7,21 @@ import './FakeBscToken.sol';
 
 contract Afen is ERC1155, Ownable {
     
-    FakeAfenToken afen = new FakeAfenToken();
-    FakeBscToken bsc = new FakeBscToken();
+    // FakeAfenToken afen = new FakeAfenToken();
+    // FakeBscToken bsc = new FakeBscToken();
     FakeAfenToken public deployed_afen;
+    FakeBscToken public deployed_bsc;
     constructor() ERC1155("") Ownable() {}
 
     event GetDeployedAfen(address addr);
-    function GetDeployed(address afen_addr) public {
+    function CallDeployedAfen(address afen_addr) public {
         deployed_afen = FakeAfenToken(afen_addr);
         emit GetDeployedAfen(address(deployed_afen));
+    }
+    event GetDeployedBsc(address addr);
+    function CallDeployedBsc(address bsc_addr) public {
+        deployed_bsc = FakeBscToken(bsc_addr);
+        emit GetDeployedBsc(address(deployed_bsc));
     }
     struct Nft {
         string _hash;
@@ -83,10 +89,10 @@ contract Afen is ERC1155, Ownable {
     function get_nft(uint nft_id) public {
         emit GotNft(nft_id, nft_list[nft_id]._hash, nft_list[nft_id].creator, nft_list[nft_id].total, nft_list[nft_id].sellable_amount);
     }
-    event AfenAddr(address afen_addr);
-    function get_afen_address() public {
-        emit AfenAddr(address(afen));
-    }
+    // event AfenAddr(address afen_addr);
+    // function get_afen_address() public {
+    //     emit AfenAddr(address(afen));
+    // }
     function list_fee(uint price) public pure returns(uint) {
         return price * 4 / 100;
     }
@@ -110,8 +116,8 @@ contract Afen is ERC1155, Ownable {
                 deployed_afen.safeTransfer(msg.sender, address(this), fee);
             } else {
                 fee = list_fee(nft_list[nft_id].b_price);
-                require(bsc.balanceOf(msg.sender) > fee, "msg.sender bsc balance has to be greater than setting fee");
-                bsc.safeTransfer(msg.sender, address(this), fee);
+                require(deployed_bsc.balanceOf(msg.sender) > fee, "msg.sender bsc balance has to be greater than setting fee");
+                deployed_bsc.safeTransfer(msg.sender, address(this), fee);
             }
         } else {
             sell_list[nftid_sellids[nft_id][0]].amount += amount;

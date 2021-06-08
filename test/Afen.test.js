@@ -5,6 +5,7 @@ require('chai')
 const {assert} = require('chai')    
 
 const FakeAfenToken = artifacts.require('./FakeAfenToken.sol')
+const FakeBscToken = artifacts.require('./FakeBscToken.sol')
 const Main = artifacts.require('./Main.sol')
 const Afen = artifacts.require('./Afen.sol')
 
@@ -92,15 +93,23 @@ contract('Afen Contract Test', (accounts) => {
     let res
     let afen_wallet, main_wallet
     before(async() => {
-        
         afen = await FakeAfenToken.deployed()
+        bsc = await FakeBscToken.deployed()
         main = await Afen.deployed()
-        res = await main.GetDeployed(afen.address)
+        // console.log('deployed afen address:', deployed_afen)
+        // afen_wallet = await main.get_afen_address()
+        // console.log('contract afen address : ', afen_wallet.logs[0].args.afen_addr.toString())
+        // console.log('console afen address:', afen.address)
+    })
+    it('CallDeployedAfen() method test', async() => {
+        res = await main.CallDeployedAfen(afen.address)
         let deployed_afen = res.logs[0].args.addr
-        console.log('deployed afen address:', deployed_afen)
-        afen_wallet = await main.get_afen_address()
-        console.log('contract afen address : ', afen_wallet.logs[0].args.afen_addr.toString())
-        console.log('console afen address:', afen.address)
+        assert.equal(deployed_afen, afen.address, "deployed afen address is correct")
+    })
+    it('CallDeployedBsc() method test', async() => {
+        res = await main.CallDeployedBsc(bsc.address)
+        let deployed_bsc = res.logs[0].args.addr
+        assert.equal(deployed_bsc, bsc.address, "deployed bsc address is correct")
     })
     it('mint() method test', async() => {
         res = await main.mint('hash_string_0', 100, 100, 100, {from: accounts[0]})
