@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">15.38% </span>
+        <span class="strong">76.92% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/13</span>
+        <span class='fraction'>10/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">20% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/5</span>
+        <span class='fraction'>4/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">15.38% </span>
+        <span class="strong">76.92% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/13</span>
+        <span class='fraction'>10/13</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -93,8 +93,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6×</span>
-<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -103,16 +109,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,7 +121,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
@@ -137,10 +137,10 @@ contract FakeAfenToken {
         _balances[address(0)] = _total;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    function sell(address _to, uint _amount) public{</span>
-<span class="cstat-no" title="statement not covered" >        _balances[address(0)] -= _amount</span>;
-<span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
-<span class="cstat-no" title="statement not covered" >        emit Sold(_to, _balances[_to]);</span>
+    function sell(address _to, uint _amount) public{
+        _balances[address(0)] -= _amount;
+        _balances[_to] += _amount;
+        emit Sold(_to, _balances[_to]);
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    function transfer(address _to, uint _amount) public {</span>
@@ -148,11 +148,11 @@ contract FakeAfenToken {
 <span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
 <span class="cstat-no" title="statement not covered" >        emit Transfered(msg.sender, _balances[msg.sender], _to, _balances[_to]);</span>
     }
-<span class="fstat-no" title="function not covered" >    function safeTransfer(address _from, address _to, uint _amount) public returns(uint amount, address from, uint bal_f, address to, uint bal_t){</span>
-<span class="cstat-no" title="statement not covered" >        _balances[_from] -= _amount</span>;
-<span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
-<span class="cstat-no" title="statement not covered" >        emit Transfered(_from, _balances[_from], _to, _balances[_to]);</span>
-<span class="cstat-no" title="statement not covered" >        return (</span>
+    function safeTransfer(address _from, address _to, uint _amount) public returns(uint amount, address from, uint bal_f, address to, uint bal_t){
+        _balances[_from] -= _amount;
+        _balances[_to] += _amount;
+        emit Transfered(_from, _balances[_from], _to, _balances[_to]);
+        return (
             _amount, 
             _from,
             _balances[_from],
@@ -160,8 +160,8 @@ contract FakeAfenToken {
             _balances[_to]
         );
     }
-<span class="fstat-no" title="function not covered" >    function balanceOf(address _addr) public view returns (uint) {</span>
-<span class="cstat-no" title="statement not covered" >        return _balances[_addr];</span>
+    function balanceOf(address _addr) public view returns (uint) {
+        return _balances[_addr];
     }
 }</pre></td></tr>
 </table></pre>
@@ -169,7 +169,7 @@ contract FakeAfenToken {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 08 2021 01:47:27 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 08 2021 04:05:41 GMT-0700 (Pacific Daylight Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

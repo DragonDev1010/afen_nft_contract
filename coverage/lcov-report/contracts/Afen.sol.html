@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">93.18% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>32/32</span>
+        <span class='fraction'>41/44</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">55.56% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>10/18</span>
+        <span class='fraction'>12/24</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>12/12</span>
+        <span class='fraction'>15/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">93.18% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>32/32</span>
+        <span class='fraction'>41/44</span>
       </div>
     </div>
   </div>
@@ -169,12 +169,54 @@
 124
 125
 126
-127</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,16 +286,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,12 +363,24 @@ import './FakeAfenToken.sol';
 import './FakeBscToken.sol';
 &nbsp;
 contract Afen is ERC1155, Ownable {
+    
+    FakeAfenToken afen = new FakeAfenToken();
+    FakeBscToken bsc = new FakeBscToken();
+    FakeAfenToken public deployed_afen;
     constructor() ERC1155("") Ownable() {}
+&nbsp;
+    event GetDeployedAfen(address addr);
+    function GetDeployed(address afen_addr) public {
+        deployed_afen = FakeAfenToken(afen_addr);
+        emit GetDeployedAfen(address(deployed_afen));
+    }
     struct Nft {
         string _hash;
         address creator;
         uint total;
         uint sellable_amount;
+        uint a_price;
+        uint b_price;
     }
     Nft[] nft_list; // nft_id ==&gt; _hash, creator, amount
 &nbsp;
@@ -353,12 +425,12 @@ contract Afen is ERC1155, Ownable {
     // e.x. owner_resellids['0x1231231'] = [3,2,4,3]
     mapping(address =&gt; uint[]) owner_resellids;
     
-    event Minted(uint nft_id, string _hash, address creator, uint total, uint sellable_amount);
-    function mint(string memory _hash, uint total) public {
-        Nft memory temp = Nft(_hash, msg.sender, total, total);
+    event Minted(uint nft_id, string _hash, address creator, uint total, uint sellable_amount, uint a_price, uint b_price);
+    function mint(string memory _hash, uint total, uint a_price, uint b_price) public {
+        Nft memory temp = Nft(_hash, msg.sender, total, total, a_price, b_price);
         nft_list.push(temp);
         uint new_id = nft_list.length - 1;
-        emit Minted(new_id, nft_list[new_id]._hash, nft_list[new_id].creator, nft_list[new_id].total, nft_list[new_id].sellable_amount);
+        emit Minted(new_id, nft_list[new_id]._hash, nft_list[new_id].creator, nft_list[new_id].total, nft_list[new_id].sellable_amount, nft_list[new_id].a_price, nft_list[new_id].b_price);
     }
     event NftSize(uint size);
     function get_nft_size() public {
@@ -368,18 +440,36 @@ contract Afen is ERC1155, Ownable {
     function get_nft(uint nft_id) public {
         emit GotNft(nft_id, nft_list[nft_id]._hash, nft_list[nft_id].creator, nft_list[nft_id].total, nft_list[nft_id].sellable_amount);
     }
+    event AfenAddr(address afen_addr);
+    function get_afen_address() public {
+        emit AfenAddr(address(afen));
+    }
+    function list_fee(uint price) public pure returns(uint) {
+        return price * 4 / 100;
+    }
     mapping(uint =&gt; mapping(address =&gt; bool)) nftid_addr_setsell;
-    function set_sell(uint nft_id, uint amount) public {
+    function set_sell(uint nft_id, uint amount, uint token_kind) public {
         // nft_list ==&gt; sell_list
         <span class="missing-if-branch" title="else path not taken" >E</span>require(nft_id &lt; nft_list.length, "nft id has to be less than nft list size");
         <span class="missing-if-branch" title="else path not taken" >E</span>require(msg.sender == nft_list[nft_id].creator, "only creator can set as sell");
         <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &lt; nft_list[nft_id].sellable_amount, "sell amount has to be less than nft sellable amount");
+        
         // if nft_id not yet set as sell
         if (nftid_sellids[nft_id].length == 0) {
             SellNft memory temp = SellNft(nft_id, msg.sender, amount, true);
             sell_list.push(temp);
             uint l = sell_list.length - 1;
             nftid_sellids[nft_id].push(l);
+            uint fee;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if(token_kind == 0) {
+                fee = list_fee(nft_list[nft_id].a_price);
+                <span class="missing-if-branch" title="else path not taken" >E</span>require(deployed_afen.balanceOf(msg.sender) &gt; fee, "msg.sender afen balance has to be greater than setting fee");
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
+            } else {
+<span class="cstat-no" title="statement not covered" >                fee = list_fee(nft_list[nft_id].b_price)</span>;
+<span class="cstat-no" title="statement not covered" >                require(bsc.balanceOf(msg.sender) &gt; fee, "msg.sender bsc balance has to be greater than setting fee")</span>;
+<span class="cstat-no" title="statement not covered" >                afen.safeTransfer(msg.sender, address(this), fee)</span>;
+            }
         } else {
             sell_list[nftid_sellids[nft_id][0]].amount += amount;
         }
@@ -427,7 +517,7 @@ contract Afen is ERC1155, Ownable {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 08 2021 01:47:27 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 08 2021 04:05:41 GMT-0700 (Pacific Daylight Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

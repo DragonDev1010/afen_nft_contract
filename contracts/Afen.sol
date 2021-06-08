@@ -6,9 +6,17 @@ import './FakeAfenToken.sol';
 import './FakeBscToken.sol';
 
 contract Afen is ERC1155, Ownable {
-    constructor() ERC1155("") Ownable() {}
+    
     FakeAfenToken afen = new FakeAfenToken();
     FakeBscToken bsc = new FakeBscToken();
+    FakeAfenToken public deployed_afen;
+    constructor() ERC1155("") Ownable() {}
+
+    event GetDeployedAfen(address addr);
+    function GetDeployed(address afen_addr) public {
+        deployed_afen = FakeAfenToken(afen_addr);
+        emit GetDeployedAfen(address(deployed_afen));
+    }
     struct Nft {
         string _hash;
         address creator;
@@ -98,12 +106,12 @@ contract Afen is ERC1155, Ownable {
             uint fee;
             if(token_kind == 0) {
                 fee = list_fee(nft_list[nft_id].a_price);
-                require(afen.balanceOf(msg.sender) > fee, "msg.sender afen balance has to be greater than setting fee");
-                afen.safeTransfer(msg.sender, address(this), fee);
+                require(deployed_afen.balanceOf(msg.sender) > fee, "msg.sender afen balance has to be greater than setting fee");
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
             } else {
                 fee = list_fee(nft_list[nft_id].b_price);
                 require(bsc.balanceOf(msg.sender) > fee, "msg.sender bsc balance has to be greater than setting fee");
-                afen.safeTransfer(msg.sender, address(this), fee);
+                bsc.safeTransfer(msg.sender, address(this), fee);
             }
         } else {
             sell_list[nftid_sellids[nft_id][0]].amount += amount;

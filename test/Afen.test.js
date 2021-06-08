@@ -92,8 +92,12 @@ contract('Afen Contract Test', (accounts) => {
     let res
     let afen_wallet, main_wallet
     before(async() => {
-        main = await Afen.deployed()
+        
         afen = await FakeAfenToken.deployed()
+        main = await Afen.deployed()
+        res = await main.GetDeployed(afen.address)
+        let deployed_afen = res.logs[0].args.addr
+        console.log('deployed afen address:', deployed_afen)
         afen_wallet = await main.get_afen_address()
         console.log('contract afen address : ', afen_wallet.logs[0].args.afen_addr.toString())
         console.log('console afen address:', afen.address)
@@ -133,6 +137,7 @@ contract('Afen Contract Test', (accounts) => {
         assert.equal(res.logs[0].args.sellable_amount, 100, 'nft sellable amount is correct')
     })
     it('set_sell() method test', async() => {
+        await afen.sell(accounts[0], 1000)
         await main.set_sell(0, 30, 0)
         res = await main.get_sell_item(0)
         assert.equal(res.logs[0].args.sell_id, 0, "sell list id is correct")
@@ -145,7 +150,9 @@ contract('Afen Contract Test', (accounts) => {
         assert.equal(res.logs[0].args.total, 100, "nft total is correct")
         assert.equal(res.logs[0].args.sellable_amount, 70, "nft sellable amount is correct")
 
+        await afen.sell(accounts[1], 1000)
         await main.set_sell(1, 50, 0, {from: accounts[1]})
+        res = 
         res = await main.get_sell_item(1)
         assert.equal(res.logs[0].args.sell_id, 1, "sell list id is correct")
         assert.equal(res.logs[0].args.nft_id, 1, "nft id is correct")
