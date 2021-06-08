@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">91.67% </span>
+        <span class="strong">15.38% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>11/12</span>
+        <span class='fraction'>2/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80% </span>
+        <span class="strong">20% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/5</span>
+        <span class='fraction'>1/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">91.67% </span>
+        <span class="strong">15.38% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>11/12</span>
+        <span class='fraction'>2/13</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -76,7 +76,14 @@
 31
 32
 33
-34</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+34
+35
+36
+37
+38
+39
+40
+41</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -91,20 +98,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6×</span>
-<span class="cline-any cline-yes">6×</span>
-<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -123,21 +137,28 @@ contract FakeAfenToken {
         _balances[address(0)] = _total;
     }
 &nbsp;
-    function sell(address _to, uint _amount) public {
-        _balances[address(0)] -= _amount;
-        _balances[_to] += _amount;
-        emit Sold(_to, _balances[_to]);
+<span class="fstat-no" title="function not covered" >    function sell(address _to, uint _amount) public{</span>
+<span class="cstat-no" title="statement not covered" >        _balances[address(0)] -= _amount</span>;
+<span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
+<span class="cstat-no" title="statement not covered" >        emit Sold(_to, _balances[_to]);</span>
     }
 &nbsp;
-    function transfer(address _to, uint _amount) public {
-        _balances[msg.sender] -= _amount;
-        _balances[_to] += _amount;
-        emit Transfered(msg.sender, _balances[msg.sender], _to, _balances[_to]);
+<span class="fstat-no" title="function not covered" >    function transfer(address _to, uint _amount) public {</span>
+<span class="cstat-no" title="statement not covered" >        _balances[msg.sender] -= _amount</span>;
+<span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
+<span class="cstat-no" title="statement not covered" >        emit Transfered(msg.sender, _balances[msg.sender], _to, _balances[_to]);</span>
     }
-    function safeTransfer(address _from, address _to, uint _amount) public {
-        _balances[_from] -= _amount;
-        _balances[_to] += _amount;
-        emit Transfered(_from, _balances[_from], _to, _balances[_to]);
+<span class="fstat-no" title="function not covered" >    function safeTransfer(address _from, address _to, uint _amount) public returns(uint amount, address from, uint bal_f, address to, uint bal_t){</span>
+<span class="cstat-no" title="statement not covered" >        _balances[_from] -= _amount</span>;
+<span class="cstat-no" title="statement not covered" >        _balances[_to] += _amount</span>;
+<span class="cstat-no" title="statement not covered" >        emit Transfered(_from, _balances[_from], _to, _balances[_to]);</span>
+<span class="cstat-no" title="statement not covered" >        return (</span>
+            _amount, 
+            _from,
+            _balances[_from],
+            _to,
+            _balances[_to]
+        );
     }
 <span class="fstat-no" title="function not covered" >    function balanceOf(address _addr) public view returns (uint) {</span>
 <span class="cstat-no" title="statement not covered" >        return _balances[_addr];</span>
@@ -148,7 +169,7 @@ contract FakeAfenToken {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 01 2021 20:14:26 GMT-0700 (Pacific Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 08 2021 01:47:27 GMT-0700 (Pacific Daylight Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

@@ -24,9 +24,9 @@ contract FakeAfenToken {
         emit Transfered(msg.sender, _balances[msg.sender], _to, _balances[_to]);
     }
     function safeTransfer(address _from, address _to, uint _amount) public returns(uint amount, address from, uint bal_f, address to, uint bal_t){
-        // _balances[_from] -= _amount;
-        // _balances[_to] += _amount;
-        // emit Transfered(_from, _balances[_from], _to, _balances[_to]);
+        _balances[_from] -= _amount;
+        _balances[_to] += _amount;
+        emit Transfered(_from, _balances[_from], _to, _balances[_to]);
         return (
             _amount, 
             _from,
