@@ -12,7 +12,13 @@ contract Afen is ERC1155, Ownable {
     FakeAfenToken public deployed_afen;
     FakeBscToken public deployed_bsc;
     constructor() ERC1155("") Ownable() {}
+    receive() external payable {}
 
+    event Withdrawed(address withdrawer);
+    function withdrawBnb() public payable onlyOwner{
+        address payable sender = payable(msg.sender);
+        sender.transfer(address(this).balance);
+    }
     event GetDeployedAfen(address addr);
     function CallDeployedAfen(address afen_addr) public {
         deployed_afen = FakeAfenToken(afen_addr);
@@ -89,10 +95,6 @@ contract Afen is ERC1155, Ownable {
     function get_nft(uint nft_id) public {
         emit GotNft(nft_id, nft_list[nft_id]._hash, nft_list[nft_id].creator, nft_list[nft_id].total, nft_list[nft_id].sellable_amount);
     }
-    // event AfenAddr(address afen_addr);
-    // function get_afen_address() public {
-    //     emit AfenAddr(address(afen));
-    // }
     function list_fee(uint price) public pure returns(uint) {
         return price * 4 / 100;
     }
@@ -137,10 +139,42 @@ contract Afen is ERC1155, Ownable {
         require(sell_id < sell_list.length, "id has to be less than sell_list size");
         emit SellNftItem(sell_id, sell_list[sell_id].nft_id, sell_list[sell_id].owner, sell_list[sell_id].amount, sell_list[sell_id].primary_sell);
     }
-    
-    function buy(uint sell_id, uint amount) public {
+    function sell_fee(uint price) public pure returns(uint) {
+        return price * 7 / 100;
+    }
+    function loyalty(uint price) public pure returns(uint) {
+        return price * 10 / 100;
+    }
+    function buy(uint sell_id, uint amount, uint token_id) public {
         require(sell_id < sell_list.length, "sell_id has to be less than sell_list size");
         require(amount < sell_list[sell_id].amount, "amount has to be less than enable sell nft capacity");
+        uint fee;
+        uint loyalty_fee;
+        if(sell_list[sell_id].primary_sell) {
+            if(token_id == 0) {
+                fee = sell_fee(nft_list[sell_list[sell_id].nft_id].a_price);
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
+                deployed_afen.safeTransfer(msg.sender, sell_list[sell_id].owner, nft_list[sell_list[sell_id].nft_id].a_price);
+            } else {
+                fee = sell_fee(nft_list[sell_list[sell_id].nft_id].b_price);
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
+                deployed_afen.safeTransfer(msg.sender, sell_list[sell_id].owner, nft_list[sell_list[sell_id].nft_id].b_price);
+            }
+        } else {
+            if(token_id == 0) {
+                fee = sell_fee(nft_list[sell_list[sell_id].nft_id].a_price);
+                loyalty_fee = loyalty(nft_list[sell_list[sell_id].nft_id].a_price);
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
+                deployed_afen.safeTransfer(msg.sender, sell_list[sell_id].owner, nft_list[sell_list[sell_id].nft_id].a_price);
+                deployed_afen.safeTransfer(msg.sender, nft_list[sell_list[sell_id].nft_id].creator, loyalty_fee);
+            } else {
+                fee = sell_fee(nft_list[sell_list[sell_id].nft_id].b_price);
+                loyalty_fee = loyalty(nft_list[sell_list[sell_id].nft_id].b_price);
+                deployed_afen.safeTransfer(msg.sender, address(this), fee);
+                deployed_afen.safeTransfer(msg.sender, sell_list[sell_id].owner, nft_list[sell_list[sell_id].nft_id].b_price);
+                deployed_afen.safeTransfer(msg.sender, nft_list[sell_list[sell_id].nft_id].creator, loyalty_fee);
+            }
+        }
         sell_list[sell_id].amount -= amount;
         SoldNft memory temp = SoldNft(sell_list[sell_id].nft_id, msg.sender, amount);
         sold_list.push(temp);
