@@ -7,11 +7,15 @@ import './FakeBscToken.sol';
 
 contract Afen is ERC1155, Ownable {
     constructor() ERC1155("") Ownable() {}
+    FakeAfenToken afen = new FakeAfenToken();
+    FakeBscToken bsc = new FakeBscToken();
     struct Nft {
         string _hash;
         address creator;
         uint total;
         uint sellable_amount;
+        uint a_price;
+        uint b_price;
     }
     Nft[] nft_list; // nft_id ==> _hash, creator, amount
 
@@ -56,12 +60,12 @@ contract Afen is ERC1155, Ownable {
     // e.x. owner_resellids['0x1231231'] = [3,2,4,3]
     mapping(address => uint[]) owner_resellids;
     
-    event Minted(uint nft_id, string _hash, address creator, uint total, uint sellable_amount);
-    function mint(string memory _hash, uint total) public {
-        Nft memory temp = Nft(_hash, msg.sender, total, total);
+    event Minted(uint nft_id, string _hash, address creator, uint total, uint sellable_amount, uint a_price, uint b_price);
+    function mint(string memory _hash, uint total, uint a_price, uint b_price) public {
+        Nft memory temp = Nft(_hash, msg.sender, total, total, a_price, b_price);
         nft_list.push(temp);
         uint new_id = nft_list.length - 1;
-        emit Minted(new_id, nft_list[new_id]._hash, nft_list[new_id].creator, nft_list[new_id].total, nft_list[new_id].sellable_amount);
+        emit Minted(new_id, nft_list[new_id]._hash, nft_list[new_id].creator, nft_list[new_id].total, nft_list[new_id].sellable_amount, nft_list[new_id].a_price, nft_list[new_id].b_price);
     }
     event NftSize(uint size);
     function get_nft_size() public {
@@ -71,18 +75,36 @@ contract Afen is ERC1155, Ownable {
     function get_nft(uint nft_id) public {
         emit GotNft(nft_id, nft_list[nft_id]._hash, nft_list[nft_id].creator, nft_list[nft_id].total, nft_list[nft_id].sellable_amount);
     }
+    event AfenAddr(address afen_addr);
+    function get_afen_address() public {
+        emit AfenAddr(address(afen));
+    }
+    function list_fee(uint price) public pure returns(uint) {
+        return price * 4 / 100;
+    }
     mapping(uint => mapping(address => bool)) nftid_addr_setsell;
-    function set_sell(uint nft_id, uint amount) public {
+    function set_sell(uint nft_id, uint amount, uint token_kind) public {
         // nft_list ==> sell_list
         require(nft_id < nft_list.length, "nft id has to be less than nft list size");
         require(msg.sender == nft_list[nft_id].creator, "only creator can set as sell");
         require(amount < nft_list[nft_id].sellable_amount, "sell amount has to be less than nft sellable amount");
+        
         // if nft_id not yet set as sell
         if (nftid_sellids[nft_id].length == 0) {
             SellNft memory temp = SellNft(nft_id, msg.sender, amount, true);
             sell_list.push(temp);
             uint l = sell_list.length - 1;
             nftid_sellids[nft_id].push(l);
+            uint fee;
+            if(token_kind == 0) {
+                fee = list_fee(nft_list[nft_id].a_price);
+                require(afen.balanceOf(msg.sender) > fee, "msg.sender afen balance has to be greater than setting fee");
+                afen.safeTransfer(msg.sender, address(this), fee);
+            } else {
+                fee = list_fee(nft_list[nft_id].b_price);
+                require(bsc.balanceOf(msg.sender) > fee, "msg.sender bsc balance has to be greater than setting fee");
+                afen.safeTransfer(msg.sender, address(this), fee);
+            }
         } else {
             sell_list[nftid_sellids[nft_id][0]].amount += amount;
         }

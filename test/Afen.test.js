@@ -90,26 +90,30 @@ const Afen = artifacts.require('./Afen.sol')
 contract('Afen Contract Test', (accounts) => {
     let main, afen, bnb
     let res
+    let afen_wallet, main_wallet
     before(async() => {
         main = await Afen.deployed()
         afen = await FakeAfenToken.deployed()
+        afen_wallet = await main.get_afen_address()
+        console.log('contract afen address : ', afen_wallet.logs[0].args.afen_addr.toString())
+        console.log('console afen address:', afen.address)
     })
     it('mint() method test', async() => {
-        res = await main.mint('hash_string_0', 100, {from: accounts[0]})
+        res = await main.mint('hash_string_0', 100, 100, 100, {from: accounts[0]})
         assert.equal(res.logs[0].args.nft_id, 0, "nft id is correct")
         assert.equal(res.logs[0].args._hash, 'hash_string_0', "hash string correct")
         assert.equal(res.logs[0].args.creator, accounts[0], "nft creator is correct")
         assert.equal(res.logs[0].args.total, 100, "nft total is correct")
         assert.equal(res.logs[0].args.sellable_amount, 100, "nft sellable amount is correct")
         
-        res = await main.mint('hash_string_1', 200, {from: accounts[1]})
+        res = await main.mint('hash_string_1', 200, 200, 200, {from: accounts[1]})
         assert.equal(res.logs[0].args.nft_id, 1, "nft id is correct")
         assert.equal(res.logs[0].args._hash, 'hash_string_1', "hash string correct")
         assert.equal(res.logs[0].args.creator, accounts[1], "nft creator is correct")
         assert.equal(res.logs[0].args.total, 200, "nft total is correct")
         assert.equal(res.logs[0].args.sellable_amount, 200, "nft sellable amount is correct")
 
-        res = await main.mint('hash_string_2', 300, {from: accounts[2]})
+        res = await main.mint('hash_string_2', 300, 300, 300, {from: accounts[2]})
         assert.equal(res.logs[0].args.nft_id, 2, "nft id is correct")
         assert.equal(res.logs[0].args._hash, 'hash_string_2', "hash string correct")
         assert.equal(res.logs[0].args.creator, accounts[2], "nft creator is correct")
@@ -129,7 +133,7 @@ contract('Afen Contract Test', (accounts) => {
         assert.equal(res.logs[0].args.sellable_amount, 100, 'nft sellable amount is correct')
     })
     it('set_sell() method test', async() => {
-        await main.set_sell(0, 30)
+        await main.set_sell(0, 30, 0)
         res = await main.get_sell_item(0)
         assert.equal(res.logs[0].args.sell_id, 0, "sell list id is correct")
         assert.equal(res.logs[0].args.nft_id, 0, "nft id is correct")
@@ -141,7 +145,7 @@ contract('Afen Contract Test', (accounts) => {
         assert.equal(res.logs[0].args.total, 100, "nft total is correct")
         assert.equal(res.logs[0].args.sellable_amount, 70, "nft sellable amount is correct")
 
-        await main.set_sell(1, 50, {from: accounts[1]})
+        await main.set_sell(1, 50, 0, {from: accounts[1]})
         res = await main.get_sell_item(1)
         assert.equal(res.logs[0].args.sell_id, 1, "sell list id is correct")
         assert.equal(res.logs[0].args.nft_id, 1, "nft id is correct")
@@ -153,7 +157,7 @@ contract('Afen Contract Test', (accounts) => {
         assert.equal(res.logs[0].args.total, 200, "nft total is correct")
         assert.equal(res.logs[0].args.sellable_amount, 150, "nft sellable amount is correct")
 
-        await main.set_sell(0, 50)
+        await main.set_sell(0, 50, 0)
         res = await main.get_sell_item(0)
         assert.equal(res.logs[0].args.sell_id, 0, "sell list id is correct")
         assert.equal(res.logs[0].args.nft_id, 0, "nft id is correct")
