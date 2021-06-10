@@ -5,7 +5,7 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 import './FakeAfenToken.sol';
 import './FakeBscToken.sol';
 
-contract Afen is ERC1155, Ownable {
+contract Afen_nft is ERC1155, Ownable {
     
     // FakeAfenToken afen = new FakeAfenToken();
     // FakeBscToken bsc = new FakeBscToken();
@@ -18,16 +18,6 @@ contract Afen is ERC1155, Ownable {
     function withdrawBnb() public payable onlyOwner{
         address payable sender = payable(msg.sender);
         sender.transfer(address(this).balance);
-    }
-    event GetDeployedAfen(address addr);
-    function CallDeployedAfen(address afen_addr) public {
-        deployed_afen = FakeAfenToken(afen_addr);
-        emit GetDeployedAfen(address(deployed_afen));
-    }
-    event GetDeployedBsc(address addr);
-    function CallDeployedBsc(address bsc_addr) public {
-        deployed_bsc = FakeBscToken(bsc_addr);
-        emit GetDeployedBsc(address(deployed_bsc));
     }
     struct Nft {
         string _hash;
@@ -49,9 +39,6 @@ contract Afen is ERC1155, Ownable {
     // nft_id ==> sell_list id array
     // e.x. : nftid_sellids[0] = [1,3,8]
     mapping(uint => uint[]) nftid_sellids; 
-    // address ==> sell_list id array
-    // e.x.: owner_sellids['0x123123....'] = [4,1,5,6]
-    mapping(address => uint[]) owner_sellids;
     // Sold list : sold_id => nft_id, owner, amount
     struct SoldNft {
         uint nft_id;
@@ -61,24 +48,24 @@ contract Afen is ERC1155, Ownable {
     SoldNft[] sold_list; 
     // nft_id => sold_list id array
     // e.x. nftid_soldids[4] = [1,4,5,6]
-    mapping (uint => uint[]) nftid_soldids;
+    // mapping (uint => uint[]) nftid_soldids;
     // address ==> sold_list id array
-    // e.x. owner_soldids['0x1231231'] = [3,2,4,3]
-    mapping(address => uint[]) owner_soldids;
+    // // e.x. owner_soldids['0x1231231'] = [3,2,4,3]
+    // mapping(address => uint[]) owner_soldids;
 
-    // Resell list : resell_id => nft_id, owner, amount
-    struct ResellNft {
-        uint nft_id;
-        address owner;
-        uint amount;
-    }
-    ResellNft[] resell_list;
+    // // Resell list : resell_id => nft_id, owner, amount
+    // struct ResellNft {
+    //     uint nft_id;
+    //     address owner;
+    //     uint amount;
+    // }
+    // ResellNft[] resell_list;
     // nft_id => sold_list id array
-    // e.x. nftid_resellids[4] = [1,4,5,6]
-    mapping (uint => uint[]) nftid_resellids;
+    // // e.x. nftid_resellids[4] = [1,4,5,6]
+    // mapping (uint => uint[]) nftid_resellids;
     // address ==> sold_list id array
-    // e.x. owner_resellids['0x1231231'] = [3,2,4,3]
-    mapping(address => uint[]) owner_resellids;
+    // // e.x. owner_resellids['0x1231231'] = [3,2,4,3]
+    // mapping(address => uint[]) owner_resellids;
     
     event Minted(uint nft_id, string _hash, address creator, uint total, uint sellable_amount, uint a_price, uint b_price);
     function mint(string memory _hash, uint total, uint a_price, uint b_price) public {
